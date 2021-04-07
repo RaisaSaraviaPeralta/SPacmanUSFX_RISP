@@ -78,6 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\vclib\SDL2_mixer\include;C:\vclib\SDL2_image\include;C:\vclib\SDL2_ttf\include;C:\vclib\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2\lib\x64;C:\vclib\SDL2_image\lib;C:\vclib\SDL2_mixer\lib;C:\vclib\SDL2_ttf\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -120,6 +122,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="Fantasma.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Movimientos.h" />
     <ClInclude Include="Pacman.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
