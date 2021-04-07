@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e1a1acb2-491f-45c4-8e4d-a33a750a72b1}</ProjectGuid>
-    <RootNamespace>PPacmanUSFX</RootNamespace>
+    <ProjectGuid>{cde42b35-5c9a-4105-bb10-b1d6c6ae056d}</ProjectGuid>
+    <RootNamespace>PPacman</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,10 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main_basico.cpp" />
+    <ClCompile Include="Fantasma.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Pacman.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Fantasma.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Pacman.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
