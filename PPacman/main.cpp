@@ -1,11 +1,8 @@
 #include <iostream>
-#include "Pacman.h"
+#include "GameManager.h"
 using namespace std;
 
-int main() {
-	Pacman pacmansito;
-
-
-	cout << "prueba" << endl;
-	return 0;
+int main(int argc , char* argv[]) {
+	GameManager theApp;
+	return theApp.onExecute();
 }
