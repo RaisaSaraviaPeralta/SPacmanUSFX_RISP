@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="26_motion.cpp" />
     <ClCompile Include="Fantasma.cpp" />
     <ClCompile Include="Fruta.cpp" />
     <ClCompile Include="GameManager.cpp" />
