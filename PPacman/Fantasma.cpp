@@ -3,77 +3,92 @@
 
 using namespace std;
 
-Fantasma::Fantasma() {
-	posicionX = 100;
-	posicionY = 100;
-	velocidadX = 1;
-	velocidadY = 0;
-	velocidadPatron = 5;
-	ancho = 20;
-	alto = 20;
-	anchoPantalla = 640;
-	altoPantalla = 480;
-}
+//Fantasma::Fantasma(SDL_Renderer* _renderer, SDL_Texture* _fantasmaTexture, int _posicionX, int _posicionY, int _ancho, int _alto, int _anchoPantalla, int _altoPantalla, int _velocidadPatron):
+//	GameObject(_posicionX, _posicionY, _ancho, _alto, _anchoPantalla, _altoPantalla)
+//{
+//	// Inicializa propiedade de de pacman
+//	velocidadX = 0;
+//	velocidadY = 0;
+//	velocidadPatron = _velocidadPatron;
+//	renderer = _renderer;
+//	fantasmaTexture = _fantasmaTexture;
+//	
+//}
 
+Fantasma::Fantasma(Texture* _fantasmaTexture, int _posicionX, int _posicionY, int _ancho, int _alto, int _anchoPantalla, int _altoPantalla, int _velocidadPatron) :
+	GameObject(_posicionX, _posicionY, _ancho, _alto, _anchoPantalla, _altoPantalla)
+{
+	// Inicializa propiedade de de pacman
+	velocidadX = 0;
+	velocidadY = 0;
+	numeroAnimacion = 0;
+	velocidadPatron = _velocidadPatron;
+	fantasmaTexture = _fantasmaTexture;
+}
 
 void Fantasma::move()
 {
+	if (getPosicionX() >= posicionXDestino) {
+		if (getPosicionY() >= posicionYDestino) {
 
-	// Mover el fantasma a la izquierda o derecha
-	posicionX += velocidadX;
+			posicionXDestino = 1 + rand() % getAnchoPantalla();
+			posicionYDestino = 1 + rand() % getAltoPantalla();
 
-	// Verificar si la posicion del fantasma no salio de los bordes izquierdo o derecho
-	if ((posicionX < 0) || (posicionX + ancho > anchoPantalla))
-	{
-		// Mover fantasma atras
-		posicionX -= velocidadX;
+			if (getPosicionX() > posicionXDestino) {
+				incrementoPosicionX = -1;
+			}
+			else
+			{
+				incrementoPosicionX = -1;
+			}
+
+			if (getPosicionY() > posicionXDestino) {
+				incrementoPosicionY = 1;
+			}
+			else
+			{
+				incrementoPosicionX = 1;
+			}
+		}
+		else {
+			setPosicionY(getPosicionY() + incrementoPosicionY);
+
+			// Mover el fantasma arriba o abajo
+			setPosicionY(getPosicionY() + velocidadY);
+
+			// Verificar si la posicion del fantasma no salio de los bordes superior e inferior
+			if ((getPosicionY() < 0) || (getPosicionY() + getAlto() > getAltoPantalla()))
+			{
+				// Mover fantasma atras
+				setPosicionY(getPosicionY() - velocidadY);
+			}
+		}
+	}
+	else {
+		setPosicionX(getPosicionX() + incrementoPosicionX);
+
+		// Mover el fantasma a la izquierda o derecha
+		setPosicionX(getPosicionX() + velocidadX);
+
+		// Verificar si la posicion del fantasma no salio de los bordes izquierdo o derecho
+		if ((getPosicionX() < 0) || (getPosicionX() + getAncho() > getAnchoPantalla()))
+		{
+			// Mover fantasma atras
+			setPosicionX(getPosicionX() - velocidadX);
+		}
 	}
 
-	// Mover el fantasma arriba o abajo
-	posicionY += velocidadY;
-
-	// Verificar si la posicion del fantasma no salio de los bordes superior e inferior
-	if ((posicionY < 0) || (posicionY + alto > altoPantalla))
-	{
-		// Mover fantasma atras
-		posicionY -= velocidadY;
-	}
 }
 
 void Fantasma::render()
 {
-	// Color primario de la imagen del fantasma
-	//SDL_SetColorKey(screenSurface, SDL_TRUE, SDL_MapRGB(fantasmaSurface->format, 0, 0, 0));
+	numeroAnimacion++;
+	if (numeroAnimacion >= 4)
+		numeroAnimacion = 0;
 
-	SDL_Texture* nuevaTextura = NULL;
+	SDL_Rect renderQuad = { 25 * numeroAnimacion, 0, getAncho(), getAlto() };
 
-	nuevaTextura = SDL_CreateTextureFromSurface(renderer, fantasmaSurface);
-	if (nuevaTextura == NULL)
-	{
-		cout << "No se puede crear una textura a partir de fantasmaSurface, SDL Error: " << SDL_GetError() << endl;
-	}
-	else
-	{
-		// Obtener dimension de la imagen
-		ancho = fantasmaSurface->w;
-		alto = fantasmaSurface->h;
-	}
-
-	/*SDL_Rect* clip = nullptr;
-	double angle = 0.0;
-	SDL_Point* center = nullptr;
-	SDL_RendererFlip flip = SDL_FLIP_NONE;*/
-
-	SDL_Rect renderQuad = { posicionX, posicionY, ancho, alto };
-
-	// Establecer las dimensionces del recorte para remderizar
-	/*if (clip != NULL)
-	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}*/
-
-	// Renderizar en la pantalla
-	//SDL_RenderCopyEx(renderer, nuevaTextura, clip, &renderQuad, angle, center, flip);
-	SDL_RenderCopyEx(renderer, nuevaTextura, nullptr, &renderQuad, 0.0, nullptr, SDL_FLIP_NONE);
+	//Render to screen
+	fantasmaTexture->render(getPosicionX(), getPosicionY(), &renderQuad);
+	//SDL_RenderCopyEx(renderer, fantasmaTexture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }

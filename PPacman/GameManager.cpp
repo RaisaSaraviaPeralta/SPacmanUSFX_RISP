@@ -6,41 +6,53 @@ GameManager::GameManager() {
 	gWindow = nullptr;
 	gRenderer = nullptr;
 	gScreenSurface = nullptr;
-	//gPacManSurface = nullptr;
 	gPacmanTexture = nullptr;
-	gFantasmaSurface = nullptr;
-	gFrutaSurface = nullptr;
+	gFantasmaTexture = nullptr;
+	gMonedaTexture = nullptr;
+
+	/*for (int i = 0; i <= 3; i++)
+	{
+		gFrutasTextures[i] = nullptr;
+	}*/
 
 	juego_en_ejecucion = true;
-	//pacman = new Pacman(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, 5);
-
-	fruta = new Fruta();
 }
 
 int GameManager::onExecute() {
 	if (onInit() == false) {
 		return -1;
 	}
-	//pacman = new Pacman(gWindow, gRenderer, gScreenSurface, gPacManSurface);
-	//pacman = new Pacman(gWindow, gRenderer, gScreenSurface, gPacManSurface, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, 5);
-	pacman = new Pacman(gWindow, gRenderer, gScreenSurface, gPacmanTexture, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT, 5);
+
+	pacman = new Pacman(gRenderer, gPacmanTexture, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT, 5);
+	cout << pacman->getIdObjeto() << endl;
+
+
+	/*fantasma = new Fantasma(gRenderer, gFantasmaTexture, 0, 0, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT,  5);
+	fruta = new Fruta(gRenderer, gFrutasTextures, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT);
+	*/
+	//actoresJuego.push_back(new Pacman(gRenderer, gPacmanTexture, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT, 5));
+	actoresJuego.push_back(new Fantasma(fantasmaTexture, 0, 0, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT, 5));
+	actoresJuego.push_back(new Fruta(gRenderer, gFrutasTextures, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT));
+
+	int posx = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		posx = i * 50;
+		//monedas.push_back(new Moneda(gRenderer, gMonedaTexture, posx, 100, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT));
+		actoresJuego.push_back(new Moneda(gRenderer, gMonedaTexture, posx, 100, 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT));
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		//superMonedas.push_back(new Moneda(gRenderer, gSuperMonedaTexture, 50 + (i * 50), 50 + (i * 50), 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT));
+		actoresJuego.push_back(new Moneda(gRenderer, gSuperMonedaTexture, 50 + (i * 50), 50 + (i * 50), 25, 25, SCREEN_WIDTH, SCREEN_HEIGHT));
+	}
+
+	for (int i = 0; i < actoresJuego.size(); i++) {
+		cout << actoresJuego[i]->getIdObjeto() << endl;
+	}
 
 	srand(time(NULL));
-
-	//pacman->window = gWindow;
-	//pacman->renderer = gRenderer;
-	//pacman->screenSurface = gScreenSurface;
-	//pacman->pacmanSurface = gPacManSurface;
-
-	fantasma.window = gWindow;
-	fantasma.renderer = gRenderer;
-	fantasma.screenSurface = gScreenSurface;
-	fantasma.fantasmaSurface = gFantasmaSurface;
-
-	fruta->window = gWindow;
-	fruta->renderer = gRenderer;
-	fruta->screenSurface = gScreenSurface;
-	fruta->frutaSurface = gFrutaSurface;
 
 	SDL_Event Event;
 
@@ -49,14 +61,21 @@ int GameManager::onExecute() {
 			onEvent(&Event);
 			pacman->handleEvent(Event);
 		}
-		// Mover Pacman
+		//// Mover Pacman
 		pacman->move();
 
-		// Mover Fantasma
-		fantasma.move();
+		//// Mover Fantasma
+		//fantasma->move();
+		//
+		//fruta->mostrar();
 
-		fruta->mostrar();
-		//Clear screen
+		for (int i = 0; i < actoresJuego.size(); i++) {
+			actoresJuego[i]->move();
+			actoresJuego[i]->mostrar();
+		}
+
+
+		////Clear screen
 		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderClear(gRenderer);
 
@@ -111,14 +130,6 @@ bool GameManager::onInit() {
 			//Get window surface
 			gScreenSurface = SDL_GetWindowSurface(gWindow);
 
-			/*if ((gPacManSurface = loadMediaToSurface("Resources/PacMan_01.bmp")) == NULL) {
-				return false;
-			}*/
-
-			/*if ((gPacManSurface = SDL_LoadBMP("Resources/PacMan_01.bmp")) == NULL) {
-				return false;
-			}*/
-
 			gPacmanTexture = loadTexture("Resources/PacMan_01.bmp");
 			if (gPacmanTexture == NULL)
 			{
@@ -126,15 +137,36 @@ bool GameManager::onInit() {
 				success = false;
 			}
 
+			Texture::renderer = gRenderer;
 
-			if ((gFantasmaSurface = SDL_LoadBMP("Resources/Fantasma.bmp")) == NULL) {
-				return false;
+			fantasmaTexture = new Texture();
+			fantasmaTexture->loadFromImage("Resources/Blinky.bmp");
+
+			/*gFantasmaTexture = loadTexture("Resources/Fantasma.bmp");
+			if (gFantasmaTexture == NULL)
+			{
+				cout << "Fallo en la carga de la textura aqui" << endl;
+				success = false;
+			}*/
+
+			gFrutasTextures.push_back(loadTexture("Resources/Fruta01.png"));
+			gFrutasTextures.push_back(loadTexture("Resources/Fruta02.png"));
+			gFrutasTextures.push_back(loadTexture("Resources/Fruta03.png"));
+			gFrutasTextures.push_back(loadTexture("Resources/Fruta04.png"));
+
+			gMonedaTexture = loadTexture("Resources/point.bmp");
+			if (gMonedaTexture == NULL)
+			{
+				cout << "Fallo en la carga de la textura" << endl;
+				success = false;
 			}
 
-			if ((gFrutaSurface = SDL_LoadBMP("Resources/Fruta01.bmp")) == NULL) {
-				return false;
+			gSuperMonedaTexture = loadTexture("Resources/point2.bmp");
+			if (gSuperMonedaTexture == NULL)
+			{
+				cout << "Fallo en la carga de la textura" << endl;
+				success = false;
 			}
-
 		}
 	}
 
@@ -146,18 +178,30 @@ void GameManager::onEvent(SDL_Event* Event) {
 		juego_en_ejecucion = false;
 	}
 };
+
 void GameManager::onLoop() {};
+
 void GameManager::onRender() {
 	pacman->render();
-	fantasma.render();
+	/*fantasma->render();
 	fruta->render();
+	for (int i = 0; i < 10; i++)
+	{
+		monedas[i]->render();
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		superMonedas[i]->render();
+	}*/
+
+	for (int i = 0; i < actoresJuego.size(); i++) {
+		actoresJuego[i]->render();
+	}
 };
 
 void GameManager::onCleanup() {
 	SDL_FreeSurface(gScreenSurface);
-	//SDL_FreeSurface(gPacManSurface);
-	SDL_FreeSurface(gFantasmaSurface);
-	SDL_FreeSurface(gFrutaSurface);
 
 	SDL_Quit();
 };

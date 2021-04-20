@@ -1,99 +1,14 @@
 #include <stdio.h>
 #include "Pacman.h"
 
-Pacman::Pacman()
+Pacman::Pacman(SDL_Renderer* _renderer, SDL_Texture* _pacmanTexture, int _posicionX, int _posicionY, int _ancho, int _alto, int _anchoPantalla, int _altoPantalla, int _velocidadPatron) :
+	GameObject(_posicionX, _posicionY, _ancho, _alto, _anchoPantalla, _altoPantalla)
 {
 	// Inicializa propiedade de de pacman
-	posicionX = 100;
-	posicionY = 100;
-	velocidadX = 0;
-	velocidadY = 0;
-	velocidadPatron = 5;
-	ancho = 25;
-	alto = 25;
-	anchoPantalla = 640;
-	altoPantalla = 480;
-}
-
-Pacman::Pacman(int _posicionX, int _posicionY, int _anchoPantalla, int _altoPantalla)
-{
-	// Inicializa propiedade de de pacman
-	posicionX = _posicionX;
-	posicionY = _posicionY;
-	velocidadX = 0;
-	velocidadY = 0;
-	velocidadPatron = 5;
-	ancho = 25;
-	alto = 25;
-	anchoPantalla = _anchoPantalla;
-	altoPantalla = _altoPantalla;
-}
-
-Pacman::Pacman(int _posicionX, int _posicionY, int _anchoPantalla, int _altoPantalla, int _velocidadPatron)
-{
-	// Inicializa propiedade de de pacman
-	posicionX = _posicionX;
-	posicionY = _posicionY;
 	velocidadX = 0;
 	velocidadY = 0;
 	velocidadPatron = _velocidadPatron;
-	ancho = 25;
-	alto = 25;
-	anchoPantalla = _anchoPantalla;
-	altoPantalla = _altoPantalla;
-}
-
-Pacman::Pacman(SDL_Window* _window, SDL_Renderer* _renderer, SDL_Surface* _screenSurface, SDL_Surface* _pacmanSurface)
-{
-	// Inicializa propiedade de de pacman
-	posicionX = 100;
-	posicionY = 100;
-	velocidadX = 0;
-	velocidadY = 0;
-	velocidadPatron = 5;
-	ancho = 25;
-	alto = 25;
-	anchoPantalla = 640;
-	altoPantalla = 480;
-	window = _window;
 	renderer = _renderer;
-	screenSurface = _screenSurface;
-	pacmanSurface = _pacmanSurface;
-}
-
-Pacman::Pacman(SDL_Window* _window, SDL_Renderer* _renderer, SDL_Surface* _screenSurface, SDL_Surface* _pacmanSurface, int _posicionX, int _posicionY, int _anchoPantalla, int _altoPantalla, int _velocidadPatron)
-{
-	// Inicializa propiedade de de pacman
-	posicionX = _posicionX;
-	posicionY = _posicionY;
-	velocidadX = 0;
-	velocidadY = 0;
-	velocidadPatron = _velocidadPatron;
-	ancho = 25;
-	alto = 25;
-	anchoPantalla = _anchoPantalla;
-	altoPantalla = _altoPantalla;
-	window = _window;
-	renderer = _renderer;
-	screenSurface = _screenSurface;
-	pacmanSurface = _pacmanSurface;
-}
-
-Pacman::Pacman(SDL_Window* _window, SDL_Renderer* _renderer, SDL_Surface* _screenSurface, SDL_Texture* _pacmanTexture, int _posicionX, int _posicionY, int _anchoPantalla, int _altoPantalla, int _velocidadPatron)
-{
-	// Inicializa propiedade de de pacman
-	posicionX = _posicionX;
-	posicionY = _posicionY;
-	velocidadX = 0;
-	velocidadY = 0;
-	velocidadPatron = _velocidadPatron;
-	ancho = 25;
-	alto = 25;
-	anchoPantalla = _anchoPantalla;
-	altoPantalla = _altoPantalla;
-	window = _window;
-	renderer = _renderer;
-	screenSurface = _screenSurface;
 	pacmanTexture = _pacmanTexture;
 }
 
@@ -152,38 +67,8 @@ void Pacman::move()
 
 void Pacman::render()
 {
-
-	//Color key image
-	//SDL_SetColorKey(screenSurface, SDL_TRUE, SDL_MapRGB(pacmanSurface->format, 0, 0xFF, 0xFF));
-
-	//SDL_Texture* newTexture = nullptr;
-
-	//newTexture = SDL_CreateTextureFromSurface(renderer, pacmanSurface);
-	//if (newTexture == NULL)
-	//{
-	//	cout << "No se puede crear la textura a partir de la superficie, SDL Error: " << SDL_GetError() << endl;
-	//}
-	//else
-	//{
-	//	// Obtener dimensiones de la imagen
-	//	ancho = pacmanSurface->w;
-	//	alto = pacmanSurface->h;
-	//}
-
-	//SDL_Rect* clip = NULL;
-	//double angle = 0.0;
-	//SDL_Point* center = NULL;
-	//SDL_RendererFlip flip = SDL_FLIP_NONE;
-
 	SDL_Rect renderQuad = { posicionX, posicionY, ancho, alto };
 
-	//Set clip rendering dimensions
-	/*if (clip != NULL)
-	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}*/
-
-	//Render to screen
+	//Renderizar en la pantalla
 	SDL_RenderCopyEx(renderer, pacmanTexture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }

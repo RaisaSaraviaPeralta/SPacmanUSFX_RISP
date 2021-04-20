@@ -3,6 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -10,6 +11,8 @@
 #include "Pacman.h"
 #include "Fantasma.h"
 #include "Fruta.h"
+#include "Moneda.h"
+#include "Texture.h"
 
 using namespace std;
 
@@ -33,16 +36,31 @@ private:
     SDL_Surface* gScreenSurface;
 
     //The images we will load and show on the screen
-    //SDL_Surface* gPacManSurface;
     SDL_Texture* gPacmanTexture;
-    SDL_Surface* gFantasmaSurface;
-    SDL_Surface* gFrutaSurface;
+    SDL_Texture* gFantasmaTexture;
+    //SDL_Texture* gFrutasTextures[3];
+    vector<SDL_Texture*> gFrutasTextures;
+    SDL_Texture* gMonedaTexture;
+    SDL_Texture* gSuperMonedaTexture;
+
+    Texture* fantasmaTexture = nullptr;
+
+
+    /*
+    SDL_Texture* gFruta01Texture;
+    SDL_Texture* gFruta02Texture;
+    SDL_Texture* gFruta03Texture;
+    SDL_Texture* gFruta04Texture;
+    */
 
 public:
     Pacman* pacman;
-    Fantasma fantasma;
+    //vector<Fantasma*> fantasma;
+    Fantasma* fantasma;
     Fruta* fruta;
-
+    vector<Moneda*> monedas;
+    vector<Moneda*> superMonedas;
+    vector<GameObject*> actoresJuego;
 public:
     GameManager();
     int onExecute();
