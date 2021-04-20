@@ -57,6 +57,7 @@ public:
     Pacman* pacman;
     //vector<Fantasma*> fantasma;
     Fantasma* fantasma;
+    Fantasma* fantasma1;
     Fruta* fruta;
     vector<Moneda*> monedas;
     vector<Moneda*> superMonedas;
